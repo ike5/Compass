@@ -14,24 +14,53 @@ struct ContentView : View {
     
     var body: some View {
         VStack {
-            Capsule()
-                .frame(width: 5,
-                       height: 50)
+            MapView()
             
-            ZStack {
-                LoadingImageView(compassHeading: compassHeading, headingState: headingState)
-                    .rotationEffect(Angle(degrees: -self.compassHeading.degrees))
+            VStack {
+                Capsule()
+                    .frame(width: 5,
+                           height: 50)
                 
-                ForEach(Markers.markers(), id: \.self) { marker in
-                    CompassMarkerView(marker: marker,
-                                      compassDegrees: -self.compassHeading.degrees)
+                ZStack {
+                    LoadingImageView(compassHeading: compassHeading, headingState: headingState)
+                        .rotationEffect(Angle(degrees: -self.compassHeading.degrees))
+                    
+                    ForEach(Markers.markers(), id: \.self) { marker in
+                        CompassMarkerView(marker: marker,
+                                          compassDegrees: -self.compassHeading.degrees)
+                    }
                 }
+                .frame(width: 300,
+                       height: 300)
+                .rotationEffect(Angle(degrees: self.compassHeading.degrees))
+                .statusBar(hidden: true)
             }
-            .frame(width: 300,
-                   height: 300)
-            .rotationEffect(Angle(degrees: self.compassHeading.degrees))
-            .statusBar(hidden: true)
+            .offset(y: -160)
+            .padding(.bottom, -200)
+            
+            VStack(alignment: .leading) {
+                Text("La Paz")
+                    .font(.title)
+                HStack {
+                    Text("Camino Real Neighborhood")
+                    
+                    Spacer()
+                    Text("Baja California Sur")
+                    
+                }
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                
+                Divider()
+                Text("About La Paz")
+                    .font(.title2)
+                Text("La Paz, Baja California Sur is a coastal city on the Sea of Cortez in northwestern Mexico, known for its relaxed vibe, stunning sunsets, and access to world-class marine life. As the capital of Baja California Sur, it blends local culture with modern comforts. ")
+            }
+            .padding()
+            Spacer()
         }
+        
+        
     }
 }
 
