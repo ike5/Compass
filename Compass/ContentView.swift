@@ -18,6 +18,7 @@ struct ContentView : View {
                        height: 50)
             
             ZStack {
+                CircleImage()
                 ForEach(Marker.markers(), id: \.self) { marker in
                     CompassMarkerView(marker: marker,
                                       compassDegrees: 0)
@@ -33,27 +34,25 @@ struct ContentView : View {
 
 struct Marker: Hashable {
     let degrees: Double
-    let label: String
     
-    init(degrees: Double, label: String) {
+    init(degrees: Double) {
         self.degrees = degrees
-        self.label = label
     }
     
     static func markers() -> [Marker] {
         return[
-            Marker(degrees: 0, label: "N"),
-            Marker(degrees: 30, label: ""),
-            Marker(degrees: 60, label: ""),
-            Marker(degrees: 90, label: "E"),
-            Marker(degrees: 120, label: ""),
-            Marker(degrees: 150, label: ""),
-            Marker(degrees: 180, label: "S"),
-            Marker(degrees: 210,label: ""),
-            Marker(degrees: 240, label: ""),
-            Marker(degrees: 270, label: "w"),
-            Marker(degrees: 300, label: ""),
-            Marker(degrees: 330, label: "")
+            Marker(degrees: 0),
+            Marker(degrees: 30),
+            Marker(degrees: 60),
+            Marker(degrees: 90),
+            Marker(degrees: 120),
+            Marker(degrees: 150),
+            Marker(degrees: 180),
+            Marker(degrees: 210),
+            Marker(degrees: 240),
+            Marker(degrees: 270),
+            Marker(degrees: 300),
+            Marker(degrees: 330)
         ]
     }
     
@@ -76,10 +75,7 @@ struct CompassMarkerView: View {
                        height:self.capsuleHeight())
                 .foregroundColor(self.capsuleColor())
                 .padding(.bottom, 120)
-            Text(marker.label)
-                .fontWeight(.bold)
-                .rotationEffect(self.textAngle())
-                .padding(.bottom, 80)
+            Spacer()
         }
         .rotationEffect(Angle(degrees: marker.degrees))
     }
