@@ -9,7 +9,7 @@ import SwiftUI
 
 struct LoadingImageView: View {
     @ObservedObject var compassHeading = CompassHeading()
-    @State private var lastHeading: Double = 0
+    @StateObject var headingState = HeadingState()
     @State private var loadingProgress: CGFloat = 0
     @State private var timer: Timer?
     @State private var preloadedURL: URL?
@@ -26,41 +26,50 @@ struct LoadingImageView: View {
                     .rotationEffect(.degrees(-90))
                     .animation(.linear(duration: isLoading ? 4.0 : 0), value: loadingProgress)
 
-            if displayedURL != nil {
-                CircleImage()
+            if let url = displayedURL {
+                AsyncImage(url: url) { image in
+                    image.resizable().aspectRatio(contentMode: .fill).clipShape(Circle())
+                } placeholder: {
+                    ProgressView()
+                }
+                .frame(width: 200, height: 200)
             } else {
                 CircleImage()
             }
         }
         .onChange(of: compassHeading.degrees) { oldValue, newValue in
-            if abs(newValue - lastHeading) >= 15 {
+            let angleDiff = minimalAngleDifference(newValue, headingState.lastHeading)
+            print("newValue: \(newValue), lastHeading: \(headingState.lastHeading), angleDiff: \(angleDiff)")
+            if !isLoading && angleDiff >= 30 {
+                headingState.lastHeading = newValue
                 startLoaderAndPreload()
-                lastHeading = newValue
             }
         }
     }
 
     func startLoaderAndPreload() {
-        // Cancel any running loader
         timer?.invalidate()
         loadingProgress = 0
         isLoading = true
 
-        // Preload the image URL (randomize to prevent caching)
         preloadedURL = URL(string: "https://picsum.photos/500?")
 
-        // Animate the loader
-        withAnimation(.linear(duration: 4.0)) {
+        withAnimation(.linear(duration: 2.0)) {
             loadingProgress = 1.0
         }
 
-        // After 4 seconds, display the preloaded image
         timer = Timer.scheduledTimer(withTimeInterval: 4.0, repeats: false) { _ in
             displayedURL = preloadedURL
             isLoading = false
             loadingProgress = 0
+           
         }
         RunLoop.current.add(timer!, forMode: .common)
+    }
+    
+    func minimalAngleDifference(_ a: Double, _ b: Double) -> Double {
+        let diff = abs(a - b).truncatingRemainder(dividingBy: 360)
+        return diff > 180 ? 360 - diff : diff
     }
 }
 
