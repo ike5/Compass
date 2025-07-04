@@ -10,6 +10,7 @@ import SwiftData
 
 struct ContentView : View {
     @ObservedObject var compassHeading = CompassHeading()
+    @StateObject var headingState = HeadingState()
     
     var body: some View {
         VStack {
@@ -18,7 +19,7 @@ struct ContentView : View {
                        height: 50)
             
             ZStack {
-                LoadingImageView()
+                LoadingImageView(compassHeading: compassHeading, headingState: headingState)
                     .rotationEffect(Angle(degrees: -self.compassHeading.degrees))
                 
                 ForEach(Marker.markers(), id: \.self) { marker in
