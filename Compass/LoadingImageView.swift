@@ -20,7 +20,7 @@ struct LoadingImageView: View {
         ZStack {
             Circle()
                 .trim(from: 0, to: loadingProgress)
-                .stroke(Color.blue, lineWidth: 10)
+                .stroke(Color.blue.opacity(0.3), lineWidth: 7)
                 .frame(width: 210, height: 210)
                 .shadow(radius: 7)
                 .rotationEffect(.degrees(-90))

@@ -22,7 +22,7 @@ struct ContentView : View {
                 LoadingImageView(compassHeading: compassHeading, headingState: headingState)
                     .rotationEffect(Angle(degrees: -self.compassHeading.degrees))
                 
-                ForEach(Marker.markers(), id: \.self) { marker in
+                ForEach(Markers.markers(), id: \.self) { marker in
                     CompassMarkerView(marker: marker,
                                       compassDegrees: -self.compassHeading.degrees)
                 }
@@ -35,27 +35,27 @@ struct ContentView : View {
     }
 }
 
-struct Marker: Hashable {
+struct Markers: Hashable {
     let degrees: Double
     
     init(degrees: Double) {
         self.degrees = degrees
     }
     
-    static func markers() -> [Marker] {
+    static func markers() -> [Markers] {
         return[
-            Marker(degrees: 0),
-            Marker(degrees: 30),
-            Marker(degrees: 60),
-            Marker(degrees: 90),
-            Marker(degrees: 120),
-            Marker(degrees: 150),
-            Marker(degrees: 180),
-            Marker(degrees: 210),
-            Marker(degrees: 240),
-            Marker(degrees: 270),
-            Marker(degrees: 300),
-            Marker(degrees: 330)
+            Markers(degrees: 0),
+            Markers(degrees: 30),
+            Markers(degrees: 60),
+            Markers(degrees: 90),
+            Markers(degrees: 120),
+            Markers(degrees: 150),
+            Markers(degrees: 180),
+            Markers(degrees: 210),
+            Markers(degrees: 240),
+            Markers(degrees: 270),
+            Markers(degrees: 300),
+            Markers(degrees: 330)
         ]
     }
     
@@ -65,7 +65,7 @@ struct Marker: Hashable {
 }
 
 struct CompassMarkerView: View {
-    let marker: Marker
+    let marker: Markers
     let compassDegrees: Double
     
     var body: some View {
@@ -87,7 +87,7 @@ struct CompassMarkerView: View {
         return self.marker.degrees == 0 ? 7:3
     }
     private func capsuleHeight() -> CGFloat {
-        return self.marker.degrees == 0 ? 45:30
+        return self.marker.degrees == 0 ? 20:10
     }
     private func capsuleColor() -> Color {
         return self.marker.degrees == 0 ? .red : .gray
