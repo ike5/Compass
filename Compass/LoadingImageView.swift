@@ -20,25 +20,16 @@ struct LoadingImageView: View {
         ZStack {
             Circle()
                 .trim(from: 0, to: loadingProgress)
-                .stroke(Color.blue, lineWidth: 5)
-                .frame(width: 220, height: 220)
+                .stroke(Color.blue, lineWidth: 10)
+                .frame(width: 210, height: 210)
+                .shadow(radius: 7)
                 .rotationEffect(.degrees(-90))
             if let url = imageURL {
-                AsyncImage(url: url) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .clipShape(Circle())
-                } placeholder: {
-                    ProgressView()
-                }
-                .frame(width: 200, height: 200)
-            } else {
-                CircleImage() // fallback
+                CircleImage()
             }
         }
         .onChange(of: compassHeading.degrees) { oldValue, newValue in
-            if abs(newValue - lastHeading) > 15 {
+            if abs(newValue - lastHeading) > 10 {
                 resetLoading()
             }
             lastHeading = newValue
@@ -47,7 +38,7 @@ struct LoadingImageView: View {
 
     func fetchNewPhoto() {
         print("Fetching new photo...")
-        imageURL = URL(string: "https://picsum.photos/200?\(Int.random(in: 0...10000))")
+        imageURL = URL(string: "https://picsum.photos/500")
     }
 
     func resetLoading() {
@@ -57,7 +48,7 @@ struct LoadingImageView: View {
         headingPaused = false
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             secondsPaused += 1
-            if secondsPaused > 2 && secondsPaused <= 4 {
+            if secondsPaused > 1 && secondsPaused <= 4 {
                 withAnimation(.linear(duration: 1)) {
                     loadingProgress = CGFloat(secondsPaused - 2) / 2
                 }

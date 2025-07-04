@@ -18,8 +18,9 @@ struct ContentView : View {
                        height: 50)
             
             ZStack {
-                CircleImage()
+                LoadingImageView()
                     .rotationEffect(Angle(degrees: -self.compassHeading.degrees))
+                
                 ForEach(Marker.markers(), id: \.self) { marker in
                     CompassMarkerView(marker: marker,
                                       compassDegrees: -self.compassHeading.degrees)
